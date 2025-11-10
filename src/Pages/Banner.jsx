@@ -11,19 +11,19 @@ import "swiper/css/navigation";
 // Simple slides for Import-Export theme
 const slides = [
   {
-    img: "https://images.unsplash.com/photo-1581091870621-1f4b091e0de3?w=1200&h=600&fit=crop",
+    img: "https://plus.unsplash.com/premium_photo-1661963455086-8fbd8a330cd5?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1074",
     title: "Global Trade Hub",
     desc: "Connect buyers & sellers worldwide.",
     icon: <FaBoxOpen className="text-3xl text-blue-500" />,
   },
   {
-    img: "https://images.unsplash.com/photo-1558618047-3c8c76ca6e42?w=1200&h=600&fit=crop",
+    img: "https://images.unsplash.com/photo-1592963219751-3800a144a41e?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=736",
     title: "Seamless Exports",
     desc: "Manage logistics effortlessly.",
     icon: <MdImportExport className="text-3xl text-indigo-500" />,
   },
   {
-    img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&h=600&fit=crop",
+    img: "https://plus.unsplash.com/premium_photo-1661521311724-595cf2c3c60e?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1170",
     title: "Secure Imports",
     desc: "Fast & reliable international deals.",
     icon: <FaBoxOpen className="text-3xl text-purple-500" />,

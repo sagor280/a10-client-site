@@ -7,6 +7,7 @@ import MyImports from "../Pages/MyImports";
 import AddExports from "../Pages/AddExports";
 import Login from "../Pages/Login";
 import Register from "../Pages/Register";
+import PrivateRouter from "./PrivateRouter";
 
 export const router = createBrowserRouter([
     {
@@ -19,21 +20,34 @@ export const router = createBrowserRouter([
             },
             {
                 path:"/all-products",
-                element:<AllProducts/>
+                element:<AllProducts/>,
+                loader:()=> fetch('http://localhost:3000/products')
             },
             {
                 path:"/my-exports",
-                element:<MyExports/>
+                element:(
+                    <PrivateRouter>
+                        <MyExports/>
+                    </PrivateRouter>
+                )
             },
            
             {
                 path:"/my-imports",
-                element:<MyImports/>
+                element:(
+                    <PrivateRouter>
+                        <MyImports/>
+                    </PrivateRouter>
+                )
             },
            
             {
                 path:"/add-export",
-                element:<AddExports/>
+                element:(
+                    <PrivateRouter>
+                        <AddExports/>
+                    </PrivateRouter>
+                )
             },
             {
                 path:"/login",
