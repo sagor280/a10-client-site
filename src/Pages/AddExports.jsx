@@ -1,7 +1,9 @@
-import React from "react";
+import React, { use } from "react";
 import toast from "react-hot-toast";
+import { AuthContext } from "../Context/AuthContext";
 
 const AddExports = () => {
+    const {user}=use(AuthContext)
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = {
@@ -12,6 +14,7 @@ const AddExports = () => {
       origin: e.target.country.value,
       rating: e.target.rating.value,
       created_at: new Date(),
+      created_by:user.email
     };
      fetch('http://localhost:3000/products',{
         method:'POST',
