@@ -8,6 +8,7 @@ import AddExports from "../Pages/AddExports";
 import Login from "../Pages/Login";
 import Register from "../Pages/Register";
 import PrivateRouter from "./PrivateRouter";
+import ProductDetails from "../Pages/ProductDetails";
 
 export const router = createBrowserRouter([
     {
@@ -48,6 +49,16 @@ export const router = createBrowserRouter([
                         <AddExports/>
                     </PrivateRouter>
                 )
+            },
+            {
+                path:"/product-details/:id",
+                element:(
+                    <PrivateRouter>
+                        <ProductDetails/>
+                    </PrivateRouter>
+                ),
+                 loader:({params})=>fetch(`http://localhost:3000/products/${params.id}`)
+
             },
             {
                 path:"/login",
