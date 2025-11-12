@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../Context/AuthContext';
 import { Link } from 'react-router';
 import MyExportCard from '../Component/MyExportCard';
+import Loader from './Loader';
 
 const MyExports = () => {
     const { user } = useContext(AuthContext);
@@ -29,11 +30,9 @@ const MyExports = () => {
     }, [user.email]);
 
     if (loading) {
-        return (
-            <div className="flex justify-center items-center h-screen">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-primary border-opacity-50"></div>
-            </div>
-        );
+        return <Loader></Loader>
+            
+    
     }
 
     if (error) {
