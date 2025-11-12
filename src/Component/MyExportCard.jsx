@@ -28,7 +28,7 @@ const MyExportCard = ({ product }) => {
         {/* Buttons */}
         <div className="flex gap-3">
           <Link
-            to={`/update/${_id}`}
+             to={`/update-products/${_id}`}
             className="flex items-center justify-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full font-medium hover:bg-blue-200 transition duration-300 flex-1"
           >
             <FaPencilAlt /> Update

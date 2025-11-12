@@ -9,69 +9,77 @@ import Login from "../Pages/Login";
 import Register from "../Pages/Register";
 import PrivateRouter from "./PrivateRouter";
 import ProductDetails from "../Pages/ProductDetails";
+import UpdateProducts from "../Pages/UpdateProducts";
 
 export const router = createBrowserRouter([
-    {
-        path:"/",
-        element:<MainLayOut/>,
-        children:[
-            {
-                path:"/",
-                element:<Home/>,
-                loader:()=>fetch('http://localhost:3000/latest-products')
-            },
-            {
-                path:"/all-products",
-                element:<AllProducts/>,
-                loader:()=> fetch('http://localhost:3000/products')
-            },
-            {
-                path:"/my-exports",
-                element:(
-                    <PrivateRouter>
-                        <MyExports/>
-                    </PrivateRouter>
-                )
-            },
-           
-            {
-                path:"/my-imports",
-                element:(
-                    <PrivateRouter>
-                        <MyImports/>
-                    </PrivateRouter>
-                ),
-                
-            },
-           
-            {
-                path:"/add-export",
-                element:(
-                    <PrivateRouter>
-                        <AddExports/>
-                    </PrivateRouter>
-                )
-            },
-            {
-                path:"/product-details/:id",
-                element:(
-                    <PrivateRouter>
-                        <ProductDetails/>
-                    </PrivateRouter>
-                ),
-                 loader:({params})=>fetch(`http://localhost:3000/products/${params.id}`)
-                  
+  {
+    path: "/",
+    element: <MainLayOut />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+        loader: () => fetch("http://localhost:3000/latest-products"),
+      },
+      {
+        path: "/all-products",
+        element: <AllProducts />,
+        loader: () => fetch("http://localhost:3000/products"),
+      },
+      {
+        path: "/my-exports",
+        element: (
+          <PrivateRouter>
+            <MyExports />
+          </PrivateRouter>
+        ),
+      },
 
-            },
-            {
-                path:"/login",
-                element:<Login/>
-            },
-            {
-                path:"/register",
-                element:<Register/>
-            },
-           
-        ]
-    }
-])
+      {
+        path: "/my-imports",
+        element: (
+          <PrivateRouter>
+            <MyImports />
+          </PrivateRouter>
+        ),
+      },
+
+      {
+        path: "/add-export",
+        element: (
+          <PrivateRouter>
+            <AddExports />
+          </PrivateRouter>
+        ),
+      },
+      {
+        path: "/product-details/:id",
+        element: (
+          <PrivateRouter>
+            <ProductDetails />
+          </PrivateRouter>
+        ),
+        loader: ({ params }) =>
+          fetch(`http://localhost:3000/products/${params.id}`),
+      },
+      {
+        path: "/update-products/:id", 
+        element: (
+          <PrivateRouter>
+            <UpdateProducts />
+          </PrivateRouter>
+        ),
+        loader: ({ params }) =>
+          fetch(`http://localhost:3000/products/${params.id}`),
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
+      },
+    ],
+  },
+]);
