@@ -1,14 +1,17 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { Star, MapPin, Package } from "lucide-react";
 import { useLoaderData, useNavigate } from "react-router";
 import Swal from "sweetalert2";
+import { AuthContext } from "../Context/AuthContext";
 
 const ProductDetails = () => {
   const data = useLoaderData();
   const product = data.result;
   const navigate = useNavigate();
+  const {user}= use(AuthContext)
 
-  const [quantity, setQuantity] = useState(1);
+
+  const [quantity, setQuantity] = useState();
   const [showModal, setShowModal] = useState(false);
 
   // modal open
@@ -40,8 +43,10 @@ const ProductDetails = () => {
       name: product.name,
       importQuantity: quantity,
       price: product.price,
+      imageUrl:product.imageUrl,
       origin: product.origin,
       importedAt: new Date(),
+      userEmail: user.email
     };
 
     try {
@@ -211,7 +216,7 @@ const ProductDetails = () => {
                 type="number"
                 id="quantity"
                 value={quantity}
-                onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
+                onChange={(e) => setQuantity(parseInt(e.target.value))}
                 min="1"
                 max={product.quantity}
                 className="w-full px-4 py-2 bg-cyan-50 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"

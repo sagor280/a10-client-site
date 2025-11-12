@@ -1,9 +1,13 @@
 import React, { use } from "react";
 import toast from "react-hot-toast";
 import { AuthContext } from "../Context/AuthContext";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router";
+
 
 const AddExports = () => {
     const {user}=use(AuthContext)
+    const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = {
@@ -26,11 +30,20 @@ const AddExports = () => {
     .then(res=>res.json())
     .then(data=>{
         console.log(data)
-        toast.success('Products Successfully Added!')
+         Swal.fire({
+                  position: "top-end",
+                  icon: "success",
+                  title: "Product export successfully!",
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
+                navigate('/my-exports')
     })
+    
     .catch(err=>{
         console.log(err)
     })
+
   };
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-blue-100">

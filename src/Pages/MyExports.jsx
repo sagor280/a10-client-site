@@ -11,22 +11,12 @@ const MyExports = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const response = await fetch(`http://localhost:3000/my-products?email=${user.email}`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch products');
-                }
-                const data = await response.json();
-                setProducts(data);
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchProducts();
+        fetch(`http://localhost:3000/my-products?email=${user.email}`)
+        .then(res=> res.json())
+        .then(data=>{
+            setProducts(data)
+            setLoading(false)
+        })
     }, [user.email]);
 
     if (loading) {

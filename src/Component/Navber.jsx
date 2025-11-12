@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Link, NavLink } from "react-router";
-import { FaGlobe, FaBoxOpen, FaUserCircle } from "react-icons/fa";
+import { FaGlobe, FaBoxOpen, FaUserCircle, FaHome } from "react-icons/fa";
 import { MdImportExport, MdAddBox } from "react-icons/md";
 import { IoLogIn } from "react-icons/io5";
 import { AuthContext } from "../Context/AuthContext";
@@ -40,7 +40,7 @@ const Navbar = () => {
           >
             <li>
               <NavLink to="/" className="nav-link">
-                <FaBoxOpen /> Home
+                <FaHome />  Home
               </NavLink>
             </li>
             <li>
@@ -81,7 +81,7 @@ const Navbar = () => {
         <ul className="menu menu-horizontal px-1 gap-2 font-medium text-gray-700">
           <li>
             <NavLink to="/" className="nav-link">
-              <FaBoxOpen /> Home
+              <FaHome/> Home
             </NavLink>
           </li>
           <li>

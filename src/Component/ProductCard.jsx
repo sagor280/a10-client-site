@@ -47,7 +47,7 @@ const ProductCard = ({ product }) => {
         <div className="flex justify-between items-center">
           <span className="text-xl font-bold text-blue-700">${price}</span>
           <Link to={`/product-details/${_id}`}>
-            <button className="px-4 py-2 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium hover:from-indigo-600 hover:to-blue-700 transition">
+            <button className="px-4 py-2 rounded-full bg-linear-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium hover:from-indigo-600 hover:to-blue-700 transition">
               See Details
             </button>
           </Link>

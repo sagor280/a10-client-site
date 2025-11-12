@@ -40,7 +40,8 @@ export const router = createBrowserRouter([
                     <PrivateRouter>
                         <MyImports/>
                     </PrivateRouter>
-                )
+                ),
+                
             },
            
             {
