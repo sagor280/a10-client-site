@@ -60,6 +60,7 @@ export const router = createBrowserRouter([
                     </PrivateRouter>
                 ),
                  loader:({params})=>fetch(`http://localhost:3000/products/${params.id}`)
+                  
 
             },
             {
