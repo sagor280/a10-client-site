@@ -1,4 +1,4 @@
-import React, { use, useContext } from "react";
+import React, { useContext } from "react";
 import { Link, NavLink } from "react-router";
 import { FaGlobe, FaBoxOpen, FaUserCircle } from "react-icons/fa";
 import { MdImportExport, MdAddBox } from "react-icons/md";
@@ -7,7 +7,8 @@ import { AuthContext } from "../Context/AuthContext";
 import toast from "react-hot-toast";
 
 const Navbar = () => {
-  const { user, signOutUser } = use(AuthContext);
+  const authContext = useContext(AuthContext);
+  const { user, signOutUser } = authContext;
 
   const handleLogout = () => {
     signOutUser()
@@ -18,7 +19,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="navbar py-3 min-h-16 rounded-2xl shadow-lg bg-white/70 backdrop-blur-xl border border-white/20 max-w-7xl mx-auto px-4">
+    <div className="sticky top-0 z-50 navbar py-3 min-h-16 rounded-2xl shadow-lg bg-white/70 backdrop-blur-xl border border-white/20 max-w-7xl mx-auto px-4 ">
       <div className="navbar-start">
         {/* Mobile Dropdown */}
         <div className="dropdown">
@@ -68,7 +69,7 @@ const Navbar = () => {
         {/* Logo */}
         <Link
           to="/"
-          className="flex items-center gap-2 text-2xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-indigo-600"
+          className="flex items-center gap-2 text-2xl font-extrabold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-blue-500 to-indigo-600"
         >
           <FaGlobe className="text-3xl text-primary" />
           Import Export Hub
@@ -125,7 +126,7 @@ const Navbar = () => {
             {/* Logout Button */}
             <button
               onClick={handleLogout}
-              className="btn btn-sm rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-none shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-300"
+              className="btn btn-sm rounded-full bg-linear-to-r from-blue-500 to-indigo-600 text-white border-none shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-300"
             >
               Logout
             </button>
@@ -133,7 +134,7 @@ const Navbar = () => {
         ) : (
           <Link
             to="/login"
-            className="btn btn-sm rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-none shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-300"
+            className="btn btn-sm rounded-full bg-linear-to-r from-blue-500 to-indigo-600 text-white border-none shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-300"
           >
             <IoLogIn className="text-lg" />
             Login / Register
