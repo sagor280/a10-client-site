@@ -20,7 +20,7 @@ const MyExportCard = ({ product }) => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:3000/products/${_id}`, {
+        fetch(`https://import-export-server-blue.vercel.app/products/${_id}`, {
           method: "DELETE",
         })
           .then((res) => res.json())

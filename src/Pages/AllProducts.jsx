@@ -25,7 +25,7 @@ const AllProducts = () => {
     }
 
     const timeout = setTimeout(() => {
-      fetch(`http://localhost:3000/search?search=${searchText}`)
+      fetch(`https://import-export-server-blue.vercel.app/search?search=${searchText}`)
         .then((res) => res.json())
         .then((result) => setProducts(result))
         .catch((err) => console.error(err));

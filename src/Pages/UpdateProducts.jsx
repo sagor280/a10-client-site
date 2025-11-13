@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useLoaderData, useNavigate } from "react-router";
 import Swal from "sweetalert2";
 
@@ -6,48 +6,47 @@ const UpdateProducts = () => {
   const data = useLoaderData();
   const product = data.result;
   const navigate = useNavigate();
-   const handleSubmit = (e) => {
-      e.preventDefault();
-      const formData = {
-        name: e.target.name.value,
-        imageUrl: e.target.imageUrl.value,
-        price: e.target.price.value,
-        quantity: e.target.quantity.value,
-        origin: e.target.country.value,
-        rating: e.target.rating.value,
-        
-      
-      };
-       fetch(`http://localhost:3000/products/${product._id}`,{
-          method:'PUT',
-          headers:{
-              "Content-Type":"application/json",
-          },
-          body:JSON.stringify(formData)
-      })
-      .then(res=>res.json())
-      .then(data=>{
-          console.log(data)
-           Swal.fire({
-                    position: "top-end",
-                    icon: "success",
-                    title: "Product export successfully!",
-                    showConfirmButton: false,
-                    timer: 1500,
-                  });
-                  navigate('/my-exports')
-      })
-      
-      .catch(err=>{
-          console.log(err)
-      })
-  
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = {
+      name: e.target.name.value,
+      imageUrl: e.target.imageUrl.value,
+      price: e.target.price.value,
+      quantity: e.target.quantity.value,
+      origin: e.target.country.value,
+      rating: e.target.rating.value,
     };
 
-
+    fetch(
+      `https://import-export-server-blue.vercel.app/products/${product._id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Product updated successfully!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        navigate("/my-exports");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center ">
+    <div className="min-h-screen flex items-center justify-center">
       <div className="w-full max-w-lg bg-white/90 backdrop-blur-md p-10 rounded-3xl shadow-2xl border border-blue-100">
         <h2 className="text-3xl font-bold text-center text-blue-800 mb-8 tracking-wide">
           Update Product
@@ -150,12 +149,16 @@ const UpdateProducts = () => {
 
           {/* Buttons */}
           <div className="flex justify-end gap-4 pt-4">
+            {/* Cancel Button */}
             <button
               type="button"
+              onClick={() => navigate(-1)} 
               className="px-6 py-3 rounded-xl border border-gray-300 text-gray-700 font-medium hover:bg-gray-100 transition-all"
             >
               Cancel
             </button>
+
+            {/* Update Button */}
             <button
               type="submit"
               className="px-6 py-3 rounded-xl bg-blue-700 text-white font-semibold hover:bg-blue-800 shadow-md hover:shadow-lg transition-all"
@@ -168,4 +171,5 @@ const UpdateProducts = () => {
     </div>
   );
 };
+
 export default UpdateProducts;

@@ -50,7 +50,7 @@ const ProductDetails = () => {
 
     try {
       // Send imported product to backend
-      const res1 = await fetch("http://localhost:3000/imports", {
+      const res1 = await fetch("https://import-export-server-blue.vercel.app/imports", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(importedProduct),
@@ -60,7 +60,7 @@ const ProductDetails = () => {
 
       if (data1.success) {
         // Update product quantity
-        await fetch(`http://localhost:3000/products/${product._id}`, {
+        await fetch(`https://import-export-server-blue.vercel.app/products/${product._id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ $inc: { quantity: -quantity } }),

@@ -11,7 +11,7 @@ const MyExports = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetch(`http://localhost:3000/my-products?email=${user.email}`)
+        fetch(`https://import-export-server-blue.vercel.app/my-products?email=${user.email}`)
         .then(res=> res.json())
         .then(data=>{
             setProducts(data)

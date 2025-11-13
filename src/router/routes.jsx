@@ -19,12 +19,12 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
-        loader: () => fetch("http://localhost:3000/latest-products"),
+        loader: () => fetch("https://import-export-server-blue.vercel.app/latest-products"),
       },
       {
         path: "/all-products",
         element: <AllProducts />,
-        loader: () => fetch("http://localhost:3000/products"),
+        loader: () => fetch("https://import-export-server-blue.vercel.app/products"),
       },
       {
         path: "/my-exports",
@@ -60,7 +60,7 @@ export const router = createBrowserRouter([
           </PrivateRouter>
         ),
         loader: ({ params }) =>
-          fetch(`http://localhost:3000/products/${params.id}`),
+          fetch(`https://import-export-server-blue.vercel.app/products/${params.id}`),
       },
       {
         path: "/update-products/:id", 
@@ -70,7 +70,7 @@ export const router = createBrowserRouter([
           </PrivateRouter>
         ),
         loader: ({ params }) =>
-          fetch(`http://localhost:3000/products/${params.id}`),
+          fetch(`https://import-export-server-blue.vercel.app/products/${params.id}`),
       },
       {
         path: "/login",

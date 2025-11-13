@@ -58,7 +58,7 @@ const Navbar = () => {
             <li>
               <NavLink
                 to="/"
-                className="nav-link text-gray-700 dark:text-white"
+                className="nav-link text-gray-700 dark:text-whie"
               >
                 <FaHome /> Home
               </NavLink>

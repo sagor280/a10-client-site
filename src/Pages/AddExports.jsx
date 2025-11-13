@@ -20,7 +20,7 @@ const AddExports = () => {
       created_at: new Date(),
       created_by:user.email
     };
-     fetch('http://localhost:3000/products',{
+     fetch('https://import-export-server-blue.vercel.app/products',{
         method:'POST',
         headers:{
             "Content-Type":"application/json",
