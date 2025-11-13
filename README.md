@@ -1,16 +1,24 @@
-# React + Vite
+# Import Export Hub
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Live Site:** [Visit Live Site](https://chic-capybara-b293e5.netlify.app)
+ 
 
-Currently, two official plugins are available:
+Import Export Hub is a modern web platform where users can manage exports, browse global products, and import items into their personal "My Imports" section with ease. The platform features a clean UI, secure user authentication, and real-time updates.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Key Features
+- **User Authentication:** Login/Register with email/password or Google social login.
+- **Product Management:** Add exports, view all products, and import items into personal collection.
+- **Private Routes:** Secure pages like My Exports, My Imports, and Product Details for logged-in users.
+- **Responsive Design:** Fully responsive and optimized for mobile, tablet, and desktop.
+- **Theme Toggle:** Switch easily between Light and Dark mode.
+- **Dynamic Updates:** Imported/exported product quantities update in real-time.
+- **Search Functionality:** Quickly find products by name on the All Products page.
 
-## React Compiler
+## Tech Stack
+- **Frontend:** React.js, React Router, Tailwind CSS, React Icons
+- **Authentication:** Firebase (Email/Password + Google)
+- **Hosting:** Netlify (Frontend)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+*Developed with ❤️ to manage global imports and exports efficiently.*

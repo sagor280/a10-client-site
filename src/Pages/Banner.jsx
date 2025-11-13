@@ -34,12 +34,12 @@ const Banner = () => {
   return (
     <section className="py-5"> {/* Removed bg from section */}
       {/* Bg moved to container - now constrained like Navbar */}
-      <div className="max-w-7xl mx-auto px-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8"> {/* Added p-8 for inner padding, rounded-2xl for glassmorphism match */}
+      <div className="max-w-7xl mx-auto px-4 bg-linear-to-br from-blue-50 to-indigo-50 rounded-2xl p-8"> {/* Added p-8 for inner padding, rounded-2xl for glassmorphism match */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
           
           {/* Left Text - Gradient & Bold like Navbar Logo */}
           <div className="space-y-6 text-center lg:text-left">
-            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent leading-tight">
+            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight bg-linear-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent leading-tight">
               Import & Export
               <br />
               <span className="text-gray-800">Hub</span>
@@ -49,7 +49,7 @@ const Banner = () => {
               Streamline your trade from start to finish.
             </p>
             {/* Button matches Navbar Login style */}
-            <button className="btn btn-lg rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-none shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-300">
+            <button className="btn btn-lg rounded-full bg-linear-to-r from-blue-500 to-indigo-600 text-white border-none shadow-md hover:shadow-lg hover:scale-105 transition-transform duration-300">
               <FaBoxOpen className="text-lg mr-2" />
               Get Started
             </button>
