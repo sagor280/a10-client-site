@@ -46,7 +46,7 @@ const AddExports = () => {
 
   };
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-blue-100">
+    <div className="flex items-center justify-center min-h-screen ">
       <div className="w-full max-w-lg bg-white p-10 rounded-2xl shadow-2xl border border-blue-100">
         <h2 className="text-3xl font-semibold text-center text-blue-800 mb-10 tracking-wide">
            Add New Product

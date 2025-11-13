@@ -8,8 +8,7 @@ const ProductDetails = () => {
   const data = useLoaderData();
   const product = data.result;
   const navigate = useNavigate();
-  const {user}= use(AuthContext)
-
+  const { user } = use(AuthContext);
 
   const [quantity, setQuantity] = useState();
   const [showModal, setShowModal] = useState(false);
@@ -43,10 +42,10 @@ const ProductDetails = () => {
       name: product.name,
       importQuantity: quantity,
       price: product.price,
-      imageUrl:product.imageUrl,
+      imageUrl: product.imageUrl,
       origin: product.origin,
       importedAt: new Date(),
-      userEmail: user.email
+      userEmail: user.email,
     };
 
     try {
@@ -76,7 +75,7 @@ const ProductDetails = () => {
         });
 
         handleModalClose();
-         navigate("/all-products");
+        navigate("/all-products");
       } else {
         Swal.fire({
           position: "top-end",
@@ -97,8 +96,6 @@ const ProductDetails = () => {
       });
     }
   };
-
-
 
   return (
     <div className="container py-8 max-w-7xl mx-auto px-4">
@@ -173,9 +170,9 @@ const ProductDetails = () => {
             <h2 className="text-2xl font-semibold mb-2">Description</h2>
             <p className="text-gray-600 leading-relaxed">
               High-quality {product.name.toLowerCase()} sourced directly from{" "}
-              {product.origin}. Perfect for businesses looking to import
-              premium products at competitive prices. All products meet
-              international quality standards and come with proper certification.
+              {product.origin}. Perfect for businesses looking to import premium
+              products at competitive prices. All products meet international
+              quality standards and come with proper certification.
             </p>
           </div>
 
@@ -194,7 +191,9 @@ const ProductDetails = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20">
           <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-lg">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-bold text-blue-900">Import Product</h2>
+              <h2 className="text-lg font-bold text-blue-900">
+                Import Product
+              </h2>
               <button
                 onClick={handleModalClose}
                 className="text-gray-500 hover:text-gray-700 text-2xl"
@@ -221,7 +220,17 @@ const ProductDetails = () => {
                 onChange={(e) => setQuantity(parseInt(e.target.value))}
                 min="1"
                 max={product.quantity}
-                className="w-full px-4 py-2 bg-cyan-50 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
+                placeholder="Enter quantity"
+                className="
+    w-full px-4 py-2 
+    bg-gray-50 dark:bg-gray-700 
+    text-gray-900 dark:text-gray-100 
+    placeholder-gray-400 dark:placeholder-gray-300 
+    border border-gray-300 dark:border-gray-600 
+    rounded-full 
+    focus:outline-none focus:ring-2 focus:ring-blue-500 
+    transition-colors duration-300 mb-2
+  "
               />
 
               <p className="text-sm text-gray-500 mb-6">

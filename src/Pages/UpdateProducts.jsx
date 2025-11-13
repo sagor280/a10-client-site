@@ -47,7 +47,7 @@ const UpdateProducts = () => {
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 p-6">
+    <div className="min-h-screen flex items-center justify-center ">
       <div className="w-full max-w-lg bg-white/90 backdrop-blur-md p-10 rounded-3xl shadow-2xl border border-blue-100">
         <h2 className="text-3xl font-bold text-center text-blue-800 mb-8 tracking-wide">
           Update Product

@@ -6,7 +6,7 @@ import { Toaster } from 'react-hot-toast';
 
 const MainLayOut = () => {
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+        <div >
             <Navber/>
             <Outlet></Outlet>
             <Footer/>
