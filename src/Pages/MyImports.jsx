@@ -66,16 +66,16 @@ const MyImports = () => {
   if (loading) return <Loader />;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12 bg-linear-to-b from-teal-50 to-white min-h-screen">
+    <div className="max-w-7xl mx-auto px-4 py-12 ">
       {/* Header */}
       <div className="mb-10 text-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-teal-800 tracking-tight">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight">
           My Imports
         </h1>
         <p className="text-gray-600 text-lg mt-2 font-medium">
           Manage your imported products efficiently
         </p>
-        <div className="h-1 w-24 bg-teal-500 mx-auto mt-3 rounded-full"></div>
+        <div className="h-1 w-24  bg-blue-600  mx-auto mt-3 rounded-full"></div>
       </div>
 
       {/* No products */}
@@ -104,7 +104,7 @@ const MyImports = () => {
                 <h3 className="text-xl font-semibold text-gray-800">
                   {product.name}
                 </h3>
-                <div className="text-sm text-teal-700 mt-2 space-y-1">
+                <div className="text-sm text-gray-500  mt-2 space-y-1">
                   <p>
                     <span className="font-medium">Origin:</span>{" "}
                     {product.origin}
@@ -130,7 +130,7 @@ const MyImports = () => {
               <div className="flex justify-center sm:justify-end sm:flex-col gap-2 mt-3 sm:mt-0">
                 {/* Details Button */}
                 <button
-                  className="bg-teal-100 text-teal-700 px-4 py-2 rounded-full font-medium hover:bg-teal-200 transition duration-300 flex items-center gap-2 text-sm"
+                  className=" bg-blue-100 text-blue-700 px-4 py-2 rounded-full font-medium  hover:bg-blue-200 transition duration-300 flex items-center gap-2 text-sm"
                   onClick={() =>
                     navigate(`/product-details/${product.productId}`)
                   }
