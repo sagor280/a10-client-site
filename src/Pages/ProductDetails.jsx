@@ -1,42 +1,33 @@
 import React, { use, useState } from "react";
-import { Star, MapPin, Package } from "lucide-react";
+import { Star, MapPin, Package, ArrowLeft, ShieldCheck, Globe, Info, CheckCircle2, ShoppingBag } from "lucide-react";
 import { useLoaderData, useNavigate } from "react-router";
 import Swal from "sweetalert2";
+import { motion, AnimatePresence } from "framer-motion";
 import { AuthContext } from "../Context/AuthContext";
 
 const ProductDetails = () => {
   const data = useLoaderData();
-  const product = data.result;
+  const product = data?.result ? data.result : data;
   const navigate = useNavigate();
   const { user } = use(AuthContext);
 
-  const [quantity, setQuantity] = useState();
+  const [quantity, setQuantity] = useState(1);
   const [showModal, setShowModal] = useState(false);
 
-  // modal open
-  const handleModalOpen = () => setShowModal(true);
+  if (!product || !product.name) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
+        <div className="text-center space-y-4">
+          <div className="text-6xl animate-bounce">📦</div>
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200">Product not found!</h2>
+          <button onClick={() => navigate(-1)} className="text-blue-600 font-bold hover:underline">Go Back</button>
+        </div>
+      </div>
+    );
+  }
 
-  // modal close
-  const handleModalClose = () => {
-    setShowModal(false);
-    setQuantity(1);
-  };
-
-  // handle import submit
   const handleModalSubmit = async (e) => {
     e.preventDefault();
-
-    if (quantity > product.quantity) {
-      Swal.fire({
-        position: "top-end",
-        icon: "error",
-        title: "Quantity exceeds available stock!",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      return;
-    }
-
     const importedProduct = {
       productId: product._id,
       name: product.name,
@@ -45,222 +36,214 @@ const ProductDetails = () => {
       imageUrl: product.imageUrl,
       origin: product.origin,
       importedAt: new Date(),
-      userEmail: user.email,
+      userEmail: user?.email || "guest@user.com",
     };
 
     try {
-      // Send imported product to backend
-      const res1 = await fetch("https://import-export-server-blue.vercel.app/imports", {
+      const res = await fetch("https://import-export-server-blue.vercel.app/imports", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(importedProduct),
       });
 
-      const data1 = await res1.json();
-
+      const data1 = await res.json();
       if (data1.success) {
-        // Update product quantity
         await fetch(`https://import-export-server-blue.vercel.app/products/${product._id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ $inc: { quantity: -quantity } }),
+          body: JSON.stringify({ quantity: -quantity }),
         });
 
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Product imported successfully!",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-
-        handleModalClose();
+        Swal.fire({ icon: "success", title: "Import Successful!", showConfirmButton: false, timer: 1500 });
+        setShowModal(false);
         navigate("/all-products");
-      } else {
-        Swal.fire({
-          position: "top-end",
-          icon: "error",
-          title: "Failed to import product!",
-          showConfirmButton: false,
-          timer: 1500,
-        });
       }
     } catch (error) {
-      console.error(error);
-      Swal.fire({
-        position: "top-end",
-        icon: "error",
-        title: "Something went wrong!",
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      Swal.fire({ icon: "error", title: "Something went wrong!" });
     }
   };
 
   return (
-    <div className="container py-8 max-w-7xl mx-auto px-4">
-      {/* Back Button */}
-      <button
-        onClick={() => navigate(-1)}
-        className="mb-6 text-blue-600 hover:text-blue-800 font-semibold"
-      >
-        ← Back
-      </button>
+    <div className="min-h-screen bg-[#FDFDFD] dark:bg-gray-950 transition-colors duration-300 pb-20">
+      
+      {/* --- Section 1: Top Navigation & Back Button --- */}
+      <div className="max-w-7xl mx-auto px-4 pt-28 md:pt-32">
+        <motion.button 
+          whileHover={{ x: -5 }}
+          onClick={() => navigate(-1)}
+          className="group inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-900 text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 font-bold text-sm rounded-xl border border-gray-100 dark:border-gray-800 shadow-sm transition-all"
+        >
+          <ArrowLeft size={18} className="group-hover:scale-110 transition-transform" />
+          Back to Marketplace
+        </motion.button>
+      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        {/* Product Image */}
-        <div>
-          <img
-            src={product.imageUrl}
-            alt={product.name}
-            className="w-full rounded-lg shadow-lg"
-          />
-        </div>
-
-        {/* Product Info */}
-        <div className="space-y-6">
-          <div>
-            <h1 className="text-4xl font-bold mb-2">{product.name}</h1>
-
-            {/* Rating */}
-            <div className="flex items-center gap-1 mb-4">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  size={20}
-                  className={
-                    i < Math.round(product.rating)
-                      ? "text-yellow-400 fill-yellow-400"
-                      : "text-gray-300"
-                  }
-                />
-              ))}
-              <span className="ml-2 text-gray-600">
-                {product.rating} (125 reviews)
-              </span>
-            </div>
-
-            {/* Price */}
-            <div className="text-4xl font-bold text-blue-700">
-              ${product.price}
-            </div>
-          </div>
-
-          {/* Product Details Card */}
-          <div className="border border-gray-200 rounded-lg shadow p-6 space-y-4">
-            <div className="flex items-center gap-3">
-              <MapPin className="h-5 w-5 text-gray-400" />
-              <div>
-                <p className="text-sm text-gray-500">Origin</p>
-                <p className="font-semibold">{product.origin}</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <Package className="h-5 w-5 text-gray-400" />
-              <div>
-                <p className="text-sm text-gray-500">Available Quantity</p>
-                <p className="font-semibold">{product.quantity} units</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Description */}
-          <div>
-            <h2 className="text-2xl font-semibold mb-2">Description</h2>
-            <p className="text-gray-600 leading-relaxed">
-              High-quality {product.name.toLowerCase()} sourced directly from{" "}
-              {product.origin}. Perfect for businesses looking to import premium
-              products at competitive prices. All products meet international
-              quality standards and come with proper certification.
-            </p>
-          </div>
-
-          {/* Import Button */}
-          <button
-            onClick={handleModalOpen}
-            className="w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold py-3 rounded-lg transition"
+      {/* --- Section 2: Main Content --- */}
+      <div className="max-w-7xl mx-auto px-4 mt-8">
+        <div className="grid lg:grid-cols-2 gap-10 xl:gap-16 items-start">
+          
+          {/* Left: Product Image & Quick Badges */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-6"
           >
-            Import Now
-          </button>
+            <div className="relative aspect-square md:aspect-[4/5] rounded-[2.5rem] overflow-hidden bg-gray-100 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-2xl shadow-blue-900/5">
+              <img
+                src={product.imageUrl || "https://via.placeholder.com/600"}
+                alt={product.name}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute top-6 left-6 flex flex-col gap-2">
+                <span className="px-4 py-2 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md rounded-2xl text-xs font-black text-blue-600 shadow-lg border border-white/20 uppercase tracking-tighter">
+                  {product.origin}
+                </span>
+              </div>
+            </div>
+            
+            {/* Quick Feature Grid */}
+            <div className="grid grid-cols-3 gap-3 md:gap-4">
+              <div className="p-4 bg-white dark:bg-gray-900 rounded-[1.8rem] text-center border border-gray-50 dark:border-gray-800 shadow-sm">
+                <Globe className="mx-auto mb-2 text-blue-500" size={20} />
+                <p className="text-[10px] uppercase font-bold text-gray-400 mb-1">Region</p>
+                <p className="text-sm font-black dark:text-white uppercase">{product.origin.slice(0, 10)}</p>
+              </div>
+              <div className="p-4 bg-white dark:bg-gray-900 rounded-[1.8rem] text-center border border-gray-50 dark:border-gray-800 shadow-sm">
+                <Package className="mx-auto mb-2 text-indigo-500" size={20} />
+                <p className="text-[10px] uppercase font-bold text-gray-400 mb-1">In Stock</p>
+                <p className="text-sm font-black dark:text-white">{product.quantity}</p>
+              </div>
+              <div className="p-4 bg-white dark:bg-gray-900 rounded-[1.8rem] text-center border border-gray-50 dark:border-gray-800 shadow-sm">
+                <ShieldCheck className="mx-auto mb-2 text-green-500" size={20} />
+                <p className="text-[10px] uppercase font-bold text-gray-400 mb-1">Status</p>
+                <p className="text-sm font-black dark:text-white">Active</p>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Right: Product Info & Actions */}
+          <div className="flex flex-col h-full">
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="space-y-8"
+            >
+              <div className="space-y-4">
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white leading-tight tracking-tight">
+                  {product.name}
+                </h1>
+                <div className="flex items-center gap-3">
+                  <div className="flex text-yellow-400">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} size={18} fill={i < 4 ? "currentColor" : "none"} className={i < 4 ? "" : "text-gray-300"} />
+                    ))}
+                  </div>
+                  <span className="text-sm font-black text-gray-400 uppercase tracking-widest">Verified Trading</span>
+                </div>
+              </div>
+
+              <div className="flex items-baseline gap-2">
+                <span className="text-5xl font-black text-blue-600 tracking-tighter">${product.price}</span>
+                <span className="text-lg font-bold text-gray-400 uppercase">/ Shipment</span>
+              </div>
+
+              {/* Overview Card */}
+              <div className="p-6 md:p-8 bg-blue-50/50 dark:bg-gray-900 rounded-[2.2rem] border border-blue-100/50 dark:border-gray-800 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:rotate-12 transition-transform">
+                  <Info size={80} />
+                </div>
+                <h3 className="font-black text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                  <Info size={20} className="text-blue-600" />
+                  Product Overview
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400 leading-relaxed font-medium">
+                  {product.name} is a high-demand product sourced from {product.origin}. 
+                  Known for its durability and international quality grade, it is ready for immediate 
+                  export to worldwide locations. All logistics and documentation are managed for a seamless experience.
+                </p>
+              </div>
+
+              {/* Feature Tags */}
+              <div className="grid grid-cols-2 gap-y-3">
+                {['Secure Import', 'Global Logistics', 'Trade Insurance', 'Quality Assured'].map((item) => (
+                  <div key={item} className="flex items-center gap-2 text-sm font-black text-gray-500 dark:text-gray-400">
+                    <CheckCircle2 size={16} className="text-blue-600" /> {item}
+                  </div>
+                ))}
+              </div>
+
+              {/* Action Button */}
+              <div className="pt-6">
+                <motion.button 
+                  whileHover={{ y: -4, scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setShowModal(true)}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-5 rounded-[1.8rem] shadow-xl shadow-blue-500/20 transition-all flex items-center justify-center gap-3 text-xl"
+                >
+                  <ShoppingBag size={24} /> Start Import Process
+                </motion.button>
+                <p className="text-center text-[10px] text-gray-400 mt-4 font-black uppercase tracking-[0.2em]">
+                  Trade Intelligence System Integrated
+                </p>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </div>
 
-      {/* Import Modal */}
-      {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20">
-          <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-lg">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-bold text-blue-900">
-                Import Product
-              </h2>
-              <button
-                onClick={handleModalClose}
-                className="text-gray-500 hover:text-gray-700 text-2xl"
-              >
-                &times;
-              </button>
-            </div>
+      {/* --- Section 3: Import Modal --- */}
+      <AnimatePresence>
+        {showModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setShowModal(false)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-md"
+            />
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="relative bg-white dark:bg-gray-900 p-8 rounded-[3rem] w-full max-w-md shadow-2xl border border-white dark:border-gray-800"
+            >
+              <h2 className="text-2xl font-black text-gray-900 dark:text-white mb-6 tracking-tight">Import Request</h2>
+              <form onSubmit={handleModalSubmit} className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-xs font-black text-gray-400 uppercase tracking-widest ml-1">Select Quantity</label>
+                  <input
+                    type="number"
+                    value={quantity}
+                    onChange={(e) => setQuantity(parseInt(e.target.value) || 0)}
+                    min="1" max={product.quantity}
+                    className="w-full px-6 py-4 bg-gray-50 dark:bg-gray-800 border-none rounded-[1.5rem] focus:ring-2 focus:ring-blue-500 outline-none text-2xl font-black dark:text-white transition-all"
+                  />
+                  <div className="flex justify-between text-[10px] font-black uppercase text-gray-400 px-2 pt-1">
+                    <span>In Stock: {product.quantity}</span>
+                    <span className={quantity > product.quantity ? "text-red-500" : ""}>Request: {quantity}</span>
+                  </div>
+                </div>
 
-            <p className="text-sm text-gray-600 mb-4">
-              Enter the quantity you want to import.
-            </p>
+                <div className="bg-blue-600 p-6 rounded-[2rem] text-white shadow-lg shadow-blue-500/20">
+                  <p className="opacity-70 text-[10px] font-black uppercase tracking-widest mb-1">Total Quotation</p>
+                  <div className="flex justify-between items-end">
+                    <span className="text-4xl font-black tracking-tighter">${(quantity * product.price).toLocaleString()}</span>
+                    <span className="text-xs font-bold opacity-80 uppercase">USD Net</span>
+                  </div>
+                </div>
 
-            <form onSubmit={handleModalSubmit}>
-              <label
-                htmlFor="quantity"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Quantity
-              </label>
-              <input
-                type="number"
-                id="quantity"
-                value={quantity}
-                onChange={(e) => setQuantity(parseInt(e.target.value))}
-                min="1"
-                max={product.quantity}
-                placeholder="Enter quantity"
-                className="
-    w-full px-4 py-2 
-    bg-gray-50 dark:bg-gray-700 
-    text-gray-900 dark:text-gray-100 
-    placeholder-gray-400 dark:placeholder-gray-300 
-    border border-gray-300 dark:border-gray-600 
-    rounded-full 
-    focus:outline-none focus:ring-2 focus:ring-blue-500 
-    transition-colors duration-300 mb-2
-  "
-              />
-
-              <p className="text-sm text-gray-500 mb-6">
-                Available: {product.quantity} units
-              </p>
-
-              <div className="flex justify-end space-x-4">
-                <button
-                  type="button"
-                  onClick={handleModalClose}
-                  className="px-6 py-2 bg-white border border-gray-300 rounded-full text-blue-900 hover:bg-gray-100"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={quantity > product.quantity}
-                  className={`px-6 py-2 rounded-full text-white ${
-                    quantity > product.quantity
-                      ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-blue-900 hover:bg-blue-800"
-                  }`}
-                >
-                  Submit
-                </button>
-              </div>
-            </form>
+                <div className="flex gap-3">
+                  <button type="button" onClick={() => setShowModal(false)} className="flex-1 py-4 font-bold text-gray-400 hover:text-gray-600 transition-colors">Cancel</button>
+                  <button 
+                    type="submit" 
+                    disabled={!quantity || quantity > product.quantity} 
+                    className="flex-[2] py-4 bg-gray-900 dark:bg-white dark:text-gray-950 text-white font-black rounded-2xl shadow-xl disabled:opacity-20 transition-all active:scale-95"
+                  >
+                    Confirm Import
+                  </button>
+                </div>
+              </form>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </div>
   );
 };

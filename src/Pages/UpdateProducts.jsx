@@ -1,169 +1,155 @@
 import React from "react";
 import { useLoaderData, useNavigate } from "react-router";
 import Swal from "sweetalert2";
+import { PackageOpen, Save, X, Globe, DollarSign, Layers, Star, ImageIcon } from "lucide-react";
 
 const UpdateProducts = () => {
   const data = useLoaderData();
-  const product = data.result;
+  
+  
+  const product = data?.result || data; 
+  
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const form = e.target;
+    
     const formData = {
-      name: e.target.name.value,
-      imageUrl: e.target.imageUrl.value,
-      price: e.target.price.value,
-      quantity: e.target.quantity.value,
-      origin: e.target.country.value,
-      rating: e.target.rating.value,
+      name: form.name.value,
+      imageUrl: form.imageUrl.value,
+      price: parseFloat(form.price.value),
+      quantity: parseInt(form.quantity.value),
+      origin: form.country.value,
+      rating: parseFloat(form.rating.value),
     };
 
-    fetch(
-      `https://import-export-server-blue.vercel.app/products/${product._id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      }
-    )
+    fetch(`https://import-export-server-blue.vercel.app/products/${product?._id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Product updated successfully!",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        navigate("/my-exports");
+        if (data.modifiedCount > 0 || data.success) {
+          Swal.fire({
+            icon: "success",
+            title: "Updated Successfully!",
+            text: "Your product info has been changed.",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          navigate("/dashboard/my-exports");
+        }
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => console.error(err));
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="w-full max-w-lg bg-white/90 backdrop-blur-md p-10 rounded-3xl shadow-2xl border border-blue-100">
-        <h2 className="text-3xl font-bold text-center text-blue-800 mb-8 tracking-wide">
-          Update Product
-        </h2>
+    <div className="max-w-4xl mx-auto">
+      <div className="mb-8">
+        <h1 className="text-2xl md:text-3xl font-black text-gray-900 dark:text-white tracking-tight flex items-center gap-3">
+          <PackageOpen className="text-blue-600" size={32} /> Edit Product
+        </h1>
+        <p className="text-gray-500 dark:text-gray-400 text-sm mt-1 font-medium">
+          Change the values below to update the listing.
+        </p>
+      </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Product Name */}
-          <div>
-            <label className="block text-base font-medium text-gray-700 mb-2">
-              Product Name
-            </label>
-            <input
-              type="text"
-              defaultValue={product.name}
-              name="name"
-              placeholder="Enter product name"
-              className="w-full px-5 py-3 text-gray-800 bg-gray-50 border border-gray-300 rounded-xl 
-                         focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none transition"
-            />
-          </div>
-
-          {/* Image URL */}
-          <div>
-            <label className="block text-base font-medium text-gray-700 mb-2">
-              Image URL
-            </label>
-            <input
-              type="url"
-              defaultValue={product.imageUrl}
-              name="imageUrl"
-              placeholder="https://example.com/image.jpg"
-              className="w-full px-5 py-3 text-gray-800 bg-gray-50 border border-gray-300 rounded-xl 
-                         focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none transition"
-            />
-          </div>
-
-          {/* Price & Quantity */}
-          <div className="grid grid-cols-2 gap-6">
-            <div>
-              <label className="block text-base font-medium text-gray-700 mb-2">
-                Price (USD)
-              </label>
-              <input
-                type="number"
-                defaultValue={product.price}
-                name="price"
-                placeholder="0.00"
-                step="0.01"
-                className="w-full px-5 py-3 text-gray-800 bg-gray-50 border border-gray-300 rounded-xl 
-                           focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none transition"
-              />
-            </div>
-            <div>
-              <label className="block text-base font-medium text-gray-700 mb-2">
-                Quantity
-              </label>
-              <input
-                type="number"
-                defaultValue={product.quantity}
-                name="quantity"
-                placeholder="100"
-                className="w-full px-5 py-3 text-gray-800 bg-gray-50 border border-gray-300 rounded-xl 
-                           focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none transition"
-              />
-            </div>
-          </div>
-
-          {/* Origin & Rating */}
-          <div className="grid grid-cols-2 gap-6">
-            <div>
-              <label className="block text-base font-medium text-gray-700 mb-2">
-                Origin Country
-              </label>
+      <div className="bg-white dark:bg-gray-900 rounded-3xl border border-gray-100 dark:border-gray-800 shadow-xl overflow-hidden">
+        <form onSubmit={handleSubmit} className="p-6 md:p-10 space-y-6">
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            {/* Product Name */}
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-gray-700 dark:text-gray-300">Product Name</label>
               <input
                 type="text"
-                defaultValue={product.origin}
-                name="country"
-                placeholder="e.g., India"
-                className="w-full px-5 py-3 text-gray-800 bg-gray-50 border border-gray-300 rounded-xl 
-                           focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none transition"
+                name="name"
+                defaultValue={product?.name} 
+                required
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none dark:text-white transition-all"
               />
             </div>
-            <div>
-              <label className="block text-base font-medium text-gray-700 mb-2">
-                Rating (0–5)
-              </label>
+
+            {/* Image URL */}
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-gray-700 dark:text-gray-300">Image URL</label>
+              <input
+                type="url"
+                name="imageUrl"
+                defaultValue={product?.imageUrl} 
+                required
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none dark:text-white transition-all"
+              />
+            </div>
+
+            {/* Price */}
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-gray-700 dark:text-gray-300">Price (USD)</label>
               <input
                 type="number"
-                defaultValue={product.rating}
-                name="rating"
-                placeholder="4.5"
-                step="0.1"
-                min="0"
-                max="5"
-                className="w-full px-5 py-3 text-gray-800 bg-gray-50 border border-gray-300 rounded-xl 
-                           focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none transition"
+                name="price"
+                step="0.01"
+                defaultValue={product?.price} 
+                required
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none dark:text-white transition-all"
               />
             </div>
+
+            {/* Quantity */}
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-gray-700 dark:text-gray-300">Quantity</label>
+              <input
+                type="number"
+                name="quantity"
+                defaultValue={product?.quantity}
+                required
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none dark:text-white transition-all"
+              />
+            </div>
+
+            {/* Origin */}
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-gray-700 dark:text-gray-300">Origin Country</label>
+              <input
+                type="text"
+                name="country"
+                defaultValue={product?.origin} 
+                required
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none dark:text-white transition-all"
+              />
+            </div>
+
+            {/* Rating */}
+            <div className="space-y-2">
+              <label className="text-sm font-bold text-gray-700 dark:text-gray-300">Rating (0-5)</label>
+              <input
+                type="number"
+                name="rating"
+                step="0.1"
+                defaultValue={product?.rating} 
+                required
+                className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none dark:text-white transition-all"
+              />
+            </div>
+
           </div>
 
-          {/* Buttons */}
-          <div className="flex justify-end gap-4 pt-4">
-            {/* Cancel Button */}
+          <div className="flex justify-end gap-4 pt-6 border-t dark:border-gray-800">
             <button
               type="button"
-              onClick={() => navigate(-1)} 
-              className="px-6 py-3 rounded-xl border border-gray-300 text-gray-700 font-medium hover:bg-gray-100 transition-all"
+              onClick={() => navigate(-1)}
+              className="px-6 py-2.5 rounded-xl font-bold text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all flex items-center gap-2"
             >
-              Cancel
+              <X size={18} /> Cancel
             </button>
-
-            {/* Update Button */}
             <button
               type="submit"
-              className="px-6 py-3 rounded-xl bg-blue-700 text-white font-semibold hover:bg-blue-800 shadow-md hover:shadow-lg transition-all"
+              className="px-8 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-lg transition-all active:scale-95 flex items-center gap-2"
             >
-              Update Product
+              <Save size={18} /> Save Changes
             </button>
           </div>
         </form>

@@ -1,129 +1,136 @@
-import React, { use } from 'react';
-import { FaGlobe, FaGoogle } from 'react-icons/fa'; // Site icon (or use FaBoxOpen)
-import { Link, useLocation, useNavigate } from 'react-router'; // Fixed import
-import { AuthContext } from '../Context/AuthContext';
+import React, { useContext } from "react";
+import { useForm } from "react-hook-form";
+import { FaGoogle, FaEnvelope, FaLock } from "react-icons/fa";
+import { Link, useLocation, useNavigate } from "react-router"; 
+import { AuthContext } from "../Context/AuthContext";
+import toast from "react-hot-toast";
+import Logo from "../Component/logo/Logo";
 
 const Login = () => {
-   const { signInUser, signInWithGoogle } = use(AuthContext);
-    const location = useLocation();
+  const { signInUser, signInWithGoogle } = useContext(AuthContext);
+  const location = useLocation();
   const navigate = useNavigate();
-  console.log(location);
 
-  const handleLogIn = (event) => {
-    event.preventDefault();
-    const email = event.target.email.value;
-    const password = event.target.password.value;
+  // React Hook Form Initialization
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-    console.log(email, password);
+  const onSubmit = (data) => {
+    const { email, password } = data;
+    toast.loading("Signing in...", { id: "login-toast" });
+
     signInUser(email, password)
       .then((result) => {
-        console.log(result.user);
-        event.target.reset();
+        toast.success("Welcome Back!", { id: "login-toast" });
         navigate(location.state || "/");
       })
       .catch((error) => {
-        console.log(error);
+        toast.error(error.message || "Invalid email or password", { id: "login-toast" });
       });
   };
 
   const handleGoogleSignIn = () => {
+    toast.loading("Connecting to Google...", { id: "google-toast" });
     signInWithGoogle()
       .then((result) => {
-        console.log(result.user);
+        toast.success("Login Successful!", { id: "google-toast" });
         navigate(location?.state || "/");
       })
       .catch((error) => {
-        console.log(error);
+        toast.error(error.message, { id: "google-toast" });
       });
   };
 
   return (
-  <div className="min-h-screen flex items-center justify-center  dark:from-gray-900 dark:to-gray-800 py-12 px-4 transition-colors duration-500">
-  <div className="card bg-white dark:bg-gray-800 w-full mx-auto max-w-sm shrink-0 shadow-2xl border border-gray-200 dark:border-gray-700 rounded-3xl transition-colors duration-300">
-    <div className="card-body p-8">
-      {/* Header with Icon */}
-      <div className="text-center mb-6">
-        <div className="h-12 w-12 mx-auto rounded-full bg-linear-to-r from-blue-500 to-indigo-600 flex items-center justify-center mb-4">
-          <FaGlobe className="h-6 w-6 text-white" />
-        </div>
-        <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Welcome Back</h1>
-        <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">Sign in to ImportExport Hub</p>
-      </div>
-
-      <form onSubmit={handleLogIn}>
-        <fieldset className="space-y-4">
-          {/* Email */}
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text font-medium text-gray-700 dark:text-gray-300">Email</span>
-            </label>
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter your email"
-              className="input input-bordered w-full rounded-full bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-300 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300"
-            />
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#0b0f1a] py-12 px-4 transition-colors duration-500">
+      <div className="bg-white dark:bg-gray-900 w-full mx-auto max-w-md shadow-2xl border border-gray-100 dark:border-gray-800 rounded-[2rem] overflow-hidden">
+        <div className="p-8 md:p-12">
+          
+          {/* Animated Logo Section */}
+          <div className="text-center mb-10">
+            <div className="inline-block group transition-transform duration-500 hover:rotate-6 hover:scale-110 active:scale-95">
+              <Logo />
+            </div>
+            <h1 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight mt-4">Welcome Back</h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 font-medium">Log in to your global trade dashboard</p>
           </div>
 
-          {/* Password */}
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text font-medium text-gray-700 dark:text-gray-300">Password</span>
-            </label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Enter your password"
-              className="input input-bordered w-full rounded-full bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-300 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300"
-            />
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            
+            {/* Email Field */}
+            <div className="form-control">
+              <label className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest ml-1 mb-2 block">Email Address</label>
+              <div className="relative">
+                <FaEnvelope className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input
+                  type="email"
+                  placeholder="name@example.com"
+                  className={`w-full pl-12 pr-4 py-3.5 rounded-xl bg-gray-50 dark:bg-gray-800 border-2 ${errors.email ? 'border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.1)]' : 'border-transparent dark:border-gray-700'} focus:border-blue-500 outline-none transition-all text-gray-900 dark:text-white font-medium`}
+                  {...register("email", { 
+                    required: "Email is required",
+                    pattern: { value: /^\S+@\S+$/i, message: "Invalid email format" }
+                  })}
+                />
+              </div>
+              {errors.email && <p className="text-red-500 text-[10px] mt-1 ml-1 font-semibold">{errors.email.message}</p>}
+            </div>
+
+            {/* Password Field */}
+            <div className="form-control">
+              <div className="flex justify-between items-center mb-2">
+                <label className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest ml-1 block">Password</label>
+                <Link to="/forgot-password" size="sm" className="text-[11px] font-bold text-blue-600 hover:underline">Forgot?</Link>
+              </div>
+              <div className="relative">
+                <FaLock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input
+                  type="password"
+                  placeholder="••••••••"
+                  className={`w-full pl-12 pr-4 py-3.5 rounded-xl bg-gray-50 dark:bg-gray-800 border-2 ${errors.password ? 'border-red-500' : 'border-transparent dark:border-gray-700'} focus:border-blue-500 outline-none transition-all text-gray-900 dark:text-white font-medium`}
+                  {...register("password", { 
+                    required: "Password is required",
+                    minLength: { value: 6, message: "Must be at least 6 characters" }
+                  })}
+                />
+              </div>
+              {errors.password && <p className="text-red-500 text-[10px] mt-1 font-semibold ml-1">{errors.password.message}</p>}
+            </div>
+
+            <button
+              type="submit"
+              className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-extrabold text-lg shadow-xl shadow-blue-500/20 transition-all hover:-translate-y-1 active:scale-95"
+            >
+              Sign In
+            </button>
+          </form>
+
+          {/* Divider */}
+          <div className="relative my-8 text-center">
+            <span className="absolute inset-x-0 top-1/2 h-px bg-gray-100 dark:bg-gray-800"></span>
+            <span className="relative bg-white dark:bg-gray-900 px-4 text-xs font-black uppercase tracking-widest text-gray-400">Secure Access</span>
           </div>
 
-          {/* Forgot Password */}
-          <div className="form-control">
-            <label className="label justify-end">
-              <a className="link link-hover text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-500 transition-colors">
-                Forgot password?
-              </a>
-            </label>
-          </div>
-
-          {/* Sign In Button */}
-          <button 
-            type="submit" 
-            className="btn btn-primary text-white mt-4 rounded-full bg-linear-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 shadow-lg w-full transition-all duration-300"
+          <button
+            onClick={handleGoogleSignIn}
+            type="button"
+            className="w-full py-3.5 flex items-center justify-center gap-3 bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 rounded-xl font-bold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all active:scale-95"
           >
-            Sign In
+            <FaGoogle className="text-red-500" />
+            Continue with Google
           </button>
-        </fieldset>
-      </form>
 
-      {/* Divider */}
-      <div className="divider text-sm text-gray-500 dark:text-gray-400 my-4">OR</div>
-
-      {/* Google Sign-In */}
-      <button
-        onClick={handleGoogleSignIn}
-        type="button"
-        className="btn bg-white dark:bg-gray-700 rounded-full text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600 hover:border-blue-300 shadow-md w-full transition-all duration-300 flex items-center justify-center gap-2"
-      >
-        <FaGoogle className="text-red-500 h-4 w-4" />
-        Continue with Google
-      </button>
-
-      {/* Register Link */}
-      <p className="text-center mt-6 text-sm text-gray-600 dark:text-gray-300">
-        New to ImportExport Hub?{' '}
-        <Link
-          className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-500 font-medium transition-colors"
-          to="/register"
-        >
-          Create an account
-        </Link>
-      </p>
+          <p className="text-center mt-8 text-sm text-gray-500 dark:text-gray-400 font-medium tracking-tight">
+            New to the platform?{" "}
+            <Link className="text-blue-600 dark:text-blue-400 hover:underline font-black" to="/register">
+              Create Account
+            </Link>
+          </p>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-
   );
 };
 

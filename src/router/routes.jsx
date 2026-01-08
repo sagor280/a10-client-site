@@ -10,50 +10,39 @@ import Register from "../Pages/Register";
 import PrivateRouter from "./PrivateRouter";
 import ProductDetails from "../Pages/ProductDetails";
 import UpdateProducts from "../Pages/UpdateProducts";
+import About from "../Pages/About";
+import Contact from "../Pages/Contact";
+import DashboardLayout from "../layout/DashboardLayout";
+import DashboardHome from "../Pages/Dashboard/DashboardHome";
+import Profile from "../Pages/Dashboard/Profile";
+import Errorpage from "../Pages/Errorpage";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayOut />,
+    errorElement: <Errorpage />,
     children: [
       {
-        path: "/",
+        index: true,
         element: <Home />,
         loader: () => fetch("https://import-export-server-blue.vercel.app/latest-products"),
       },
       {
-        path: "/all-products",
+        path: "all-products",
         element: <AllProducts />,
         loader: () => fetch("https://import-export-server-blue.vercel.app/products"),
       },
       {
-        path: "/my-exports",
-        element: (
-          <PrivateRouter>
-            <MyExports />
-          </PrivateRouter>
-        ),
-      },
-
-      {
-        path: "/my-imports",
-        element: (
-          <PrivateRouter>
-            <MyImports />
-          </PrivateRouter>
-        ),
-      },
-
-      {
-        path: "/add-export",
-        element: (
-          <PrivateRouter>
-            <AddExports />
-          </PrivateRouter>
-        ),
+        path: "about",
+        element: <About />
       },
       {
-        path: "/product-details/:id",
+        path: "contact",
+        element: <Contact />
+      },
+      {
+        path: "product-details/:id",
         element: (
           <PrivateRouter>
             <ProductDetails />
@@ -63,23 +52,49 @@ export const router = createBrowserRouter([
           fetch(`https://import-export-server-blue.vercel.app/products/${params.id}`),
       },
       {
-        path: "/update-products/:id", 
-        element: (
-          <PrivateRouter>
-            <UpdateProducts />
-          </PrivateRouter>
-        ),
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "register",
+        element: <Register />,
+      },
+    ],
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <PrivateRouter>
+        <DashboardLayout />
+      </PrivateRouter>
+    ),
+    children: [
+      {
+        index: true, 
+        element: <DashboardHome />, 
+      },
+      {
+        path: "my-exports", 
+        element: <MyExports />,
+      },
+      {
+        path: "my-imports", 
+        element: <MyImports />,
+      },
+      {
+        path: "add-export", 
+        element: <AddExports />,
+      },
+      {
+        path: "update-products/:id", 
+        element: <UpdateProducts />,
         loader: ({ params }) =>
           fetch(`https://import-export-server-blue.vercel.app/products/${params.id}`),
       },
       {
-        path: "/login",
-        element: <Login />,
-      },
-      {
-        path: "/register",
-        element: <Register />,
-      },
+        path:"profile",
+        element:<Profile/>
+      }
     ],
   },
 ]);
